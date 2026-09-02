@@ -1,0 +1,56 @@
+{
+  "duration": { "fast": 100, "normal": 180, "slow": 280 },
+  "ease": {
+    "standard": [0.2, 0, 0, 1],
+    "enter": [0.16, 1, 0.3, 1],
+    "exit": [0.4, 0, 1, 1]
+  },
+  "spring": {
+    "snappy": { "mass": 0.6, "stiffness": 680, "damping": 38 },
+    "soft": { "mass": 1, "stiffness": 420, "damping": 36 },
+    "heavy": { "mass": 1.4, "stiffness": 480, "damping": 48 },
+    "drag": { "mass": 1.1, "stiffness": 560, "damping": 42 }
+  },
+  "physics": {
+    "dragFriction": 0.82,
+    "snapStrength": 0.35,
+    "resistanceLimit": 28,
+    "inertiaLimit": 10,
+    "snapRadius": 12,
+    "elasticity": 0.12
+  },
+  "scale": {
+    "hover": 1.002,
+    "press": 0.98,
+    "cardPress": 0.996,
+    "pickup": 1.012,
+    "dialog": 0.995,
+    "popover": 0.985,
+    "sliderPress": 1.08
+  },
+  "distance": { "hover": 1, "enter": 6, "drawer": 32, "drawerExit": 24 },
+  "gesture": { "mouseDistance": 6, "touchDelay": 240, "touchTolerance": 7 },
+  "timing": {
+    "spin": 900,
+    "toast": 6000,
+    "undo": 12000,
+    "hapticCooldown": 100,
+    "uploadTimeout": 180000
+  },
+  "haptic": {
+    "success": [12],
+    "error": [15, 40, 15],
+    "snap": [7],
+    "drop": [12],
+    "toggle": [7],
+    "confirm": [15],
+    "hold": [10]
+  },
+  "elevation": {
+    "0": "none",
+    "1": "0 1px 2px #26341f0a",
+    "2": "0 4px 12px #26341f10",
+    "3": "0 12px 28px #26341f24",
+    "4": "0 20px 50px #26341f2b"
+  }
+}

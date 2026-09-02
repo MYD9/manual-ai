@@ -1,0 +1,47 @@
+/* Generated from lib/motion-tokens.json. Run npm run tokens after editing. */
+:root {
+  --scale-hover: 1.002;
+  --scale-press: 0.98;
+  --scale-cardPress: 0.996;
+  --scale-pickup: 1.012;
+  --scale-dialog: 0.995;
+  --scale-popover: 0.985;
+  --scale-sliderPress: 1.08;
+  --distance-hover: 1px;
+  --distance-enter: 6px;
+  --distance-drawer: 32px;
+  --distance-drawerExit: 24px;
+  --duration-fast: 100ms;
+  --duration-normal: 180ms;
+  --duration-slow: 280ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --spring-snappy: linear(0, 0.165, 0.4203, 0.6346, 0.7836, 0.8776, 0.9334, 0.9649, 0.9821, 0.9912, 0.9958, 0.9981, 0.9992, 0.9997, 0.9999, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
+  --spring-snappy-mass: 0.6;
+  --spring-snappy-stiffness: 680;
+  --spring-snappy-damping: 38;
+  --spring-soft: linear(0, 0.0726, 0.219, 0.3828, 0.5352, 0.6637, 0.7654, 0.8421, 0.8977, 0.9364, 0.9625, 0.9795, 0.99, 0.9962, 0.9997, 1.0013, 1.002, 1.002, 1.0018, 1.0015, 1.0012, 1.0009, 1.0006, 1.0004, 1.0003, 1.0002, 1.0001, 1.0001, 1, 1, 1);
+  --spring-soft-mass: 1;
+  --spring-soft-stiffness: 420;
+  --spring-soft-damping: 36;
+  --spring-heavy: linear(0, 0.06, 0.1837, 0.3265, 0.4644, 0.5861, 0.6876, 0.769, 0.8323, 0.8803, 0.916, 0.942, 0.9607, 0.9738, 0.9829, 0.9891, 0.9933, 0.996, 0.9977, 0.9988, 0.9995, 0.9999, 1.0001, 1.0001, 1.0002, 1.0002, 1.0002, 1.0001, 1.0001, 1.0001, 1);
+  --spring-heavy-mass: 1.4;
+  --spring-heavy-stiffness: 480;
+  --spring-heavy-damping: 48;
+  --spring-drag: linear(0, 0.0867, 0.2567, 0.4402, 0.6037, 0.7346, 0.8321, 0.9004, 0.9456, 0.974, 0.9906, 0.9995, 1.0036, 1.0049, 1.0048, 1.0041, 1.0032, 1.0023, 1.0016, 1.001, 1.0006, 1.0004, 1.0002, 1.0001, 1, 1, 1, 1, 1, 1, 1);
+  --spring-drag-mass: 1.1;
+  --spring-drag-stiffness: 560;
+  --spring-drag-damping: 42;
+  --elevation-0: none;
+  --elevation-1: 0 1px 2px #26341f0a;
+  --elevation-2: 0 4px 12px #26341f10;
+  --elevation-3: 0 12px 28px #26341f24;
+  --elevation-4: 0 20px 50px #26341f2b;
+  --hover-scale: 1.002;
+  --press-scale: 0.98;
+  --drag-friction: 0.82;
+  --snap-strength: 0.35;
+  --spin-duration: 900ms;
+  --reduced-motion-duration: 0ms;
+}
