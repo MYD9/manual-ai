@@ -419,6 +419,7 @@ function Workspace() {
         : Number(b.favorite) - Number(a.favorite) ||
           b.updated_at.localeCompare(a.updated_at),
     );
+  const latestManual = [...manuals].sort((a, b) => b.updated_at.localeCompare(a.updated_at))[0];
   const searchEdited =
     q.trim() !== submittedQuery ||
     searchMode !== lastSearch.current?.mode ||
@@ -439,9 +440,10 @@ function Workspace() {
         <div className="workspace-label">
           我的个人空间 <span>{browserEdition ? "BROWSER" : "LOCAL"}</span>
         </div>
-        <nav>
+        <nav aria-label="工作空间">
           <button
-            className={'nav-item ' + (view === 'library' ? 'active' : '')}
+            className={'nav-item ' + (view === 'library' && !category && !tag ? 'active' : '')}
+            aria-current={view === 'library' && !category && !tag ? 'page' : undefined}
             onClick={() => {
               setCategory('');
               setTag('');
@@ -453,12 +455,14 @@ function Workspace() {
           </button>
           <button
             className={'nav-item ' + (view === 'search' ? 'active' : '')}
+            aria-current={view === 'search' ? 'page' : undefined}
             onClick={requestSearch}
           >
             <Search />搜索资料<kbd className="nav-shortcut">Ctrl K</kbd>
           </button>
           <button
             className={'nav-item ' + (view === 'favorites' ? 'active' : '')}
+            aria-current={view === 'favorites' ? 'page' : undefined}
             onClick={() => go('favorites')}
           >
             <Star />
@@ -466,6 +470,7 @@ function Workspace() {
           </button>
           <button
             className={'nav-item ' + (view === 'imports' ? 'active' : '')}
+            aria-current={view === 'imports' ? 'page' : undefined}
             onClick={() => go('imports')}
           >
             <Upload />
@@ -494,15 +499,16 @@ function Workspace() {
               <div key={c} className="toolbar category-row" style={{ gap: 0 }}>
                 <button
                   style={{ flex: 1, minWidth: 0 }}
-                  className={'nav-item ' + (category === c ? 'active' : '')}
+                  className={'nav-item ' + (category === c && view === 'library' ? 'active' : '')}
+                  aria-current={category === c && view === 'library' ? 'page' : undefined}
                   onClick={() => {
                     setCategory(c);
                     setTag('');
                     go('library');
                   }}
                 >
-                  <span style={{ fontSize: 11 }}>●</span>
-                  {c}
+                  <span className="category-dot" aria-hidden="true" />
+                  <span className="category-name">{c}</span>
                   <span className="nav-count">
                     {manuals.filter((m) => m.category === c).length}
                   </span>
@@ -554,6 +560,7 @@ function Workspace() {
         <div className="side-bottom">
           <button
             className={'nav-item ' + (view === 'trash' ? 'active' : '')}
+            aria-current={view === 'trash' ? 'page' : undefined}
             onClick={() => go('trash')}
           >
             <Trash2 />
@@ -564,6 +571,7 @@ function Workspace() {
           </div>
           <button
             className={'nav-item ' + (view === 'settings' ? 'active' : '')}
+            aria-current={view === 'settings' ? 'page' : undefined}
             onClick={() => go('settings')}
           >
             <Settings />
@@ -573,7 +581,7 @@ function Workspace() {
       </WorkspaceNavigation>
       <main className="main">
         <header className="topbar">
-          <div className="toolbar">
+          <div className="toolbar topbar-location">
             <button
               className="icon-btn mobile-toggle"
               aria-label={mobile ? '收起导航' : '展开导航'}
@@ -990,17 +998,18 @@ function Workspace() {
                   </div>
                 }
               />
-              {manuals.length > 0 && (
-                <div className="library-overview" aria-label="资料库概览">
-                  <div className="library-totals">
-                    <span><strong>{manuals.length}</strong> 本说明书</span>
-                    <span><strong>{entries.filter(e => e.kind === 'source').length}</strong> 份原始资料</span>
-                    <span><strong>{entries.filter(e => e.kind === 'card' || e.kind === 'note').length}</strong> 张卡片与经验</span>
-                  </div>
-                  <button className="continue-reading" onClick={() => openManual([...manuals].sort((a,b) => b.updated_at.localeCompare(a.updated_at))[0].id)}>
-                    <BookOpen size={17}/><span><small>最近更新 · 继续阅读</small><strong>{[...manuals].sort((a,b) => b.updated_at.localeCompare(a.updated_at))[0].title}</strong></span><ArrowRight size={17}/>
+              {latestManual && (
+                <section className="library-overview" aria-label="资料库概览">
+                  <dl className="library-totals">
+                    <div><dt><BookOpen size={16} />说明书</dt><dd>{manuals.length}<small>本</small></dd></div>
+                    <div><dt><FileText size={16} />原始资料</dt><dd>{entries.filter(e => e.kind === 'source').length}<small>份</small></dd></div>
+                    <div><dt><StickyNote size={16} />卡片与经验</dt><dd>{entries.filter(e => e.kind === 'card' || e.kind === 'note').length}<small>张</small></dd></div>
+                  </dl>
+                  <button className="continue-reading" onClick={() => openManual(latestManual.id)}>
+                    <span className="continue-icon"><BookOpen size={21} /></span>
+                    <span className="continue-copy"><small>最近更新 · {date(latestManual.updated_at)}</small><strong>{latestManual.title}</strong><span>打开说明书 <ArrowRight size={14} /></span></span>
                   </button>
-                </div>
+                </section>
               )}
               <form className="search-bar" onSubmit={runSearch}>
                 <Search />
@@ -1023,7 +1032,9 @@ function Workspace() {
                     <X size={15} />
                   </button>
                 )}
-                <kbd>Ctrl K</kbd>
+                <Button type="submit" disabled={searching || !q.trim()}>
+                  {searching ? '检索中' : '搜索'}<ArrowRight size={15} />
+                </Button>
               </form>
               <div className="filterbar">
                 <div>
@@ -1032,7 +1043,7 @@ function Workspace() {
                     aria-pressed={!recent}
                     onClick={() => setRecent(false)}
                   >
-                    全部资料
+                    收藏优先
                   </button>
                   <button
                     className={'filter ' + (recent ? 'active' : '')}
@@ -1054,7 +1065,7 @@ function Workspace() {
                   )}
                 </div>
                 <div className="library-view-controls">
-                <span className="result-count">
+                <span className="result-count" role="status">
                   {manuals.length
                     ? filteredManuals.length + ' 本说明书'
                     : '你的知识，从这里开始'}
@@ -1574,11 +1585,10 @@ function PageHeading({
     <div className="page-heading">
       <div>
         <div className="eyebrow">
-          A LITTLE LESS SEARCHING, A LOT MORE KNOWING
+          MANUAL AI / 工作空间
         </div>
         <h1>
           {title}
-          {!/[。.!！?？]$/.test(title) && <span className="title-dot">.</span>}
         </h1>
         <p>{subtitle}</p>
       </div>
@@ -1682,24 +1692,10 @@ function ManualCard({
   onStar: () => void | Promise<void>;
 }) {
   return (
-    <article
-      className={'manual-card note-' + e.color}
-      onClick={onOpen}
-      onKeyDown={(event) => {
-        if (
-          event.target === event.currentTarget &&
-          (event.key === 'Enter' || event.key === ' ')
-        ) {
-          event.preventDefault();
-          onOpen();
-        }
-      }}
-      tabIndex={0}
-      aria-label={'打开 ' + e.title}
-    >
+    <article className={'manual-card note-' + e.color} aria-labelledby={'manual-title-' + e.id}>
       <div className="card-top">
-        <span>
-          <BookOpen size={15} style={{ display: 'inline', marginRight: 6 }} />
+        <span className="manual-category">
+          <span className="manual-book-icon"><BookOpen size={19} /></span>
           {e.category || '未分类'}
         </span>
         <FavoriteButton
@@ -1708,7 +1704,7 @@ function ManualCard({
           onToggle={onStar}
         />
       </div>
-      <h2>{e.title}</h2>
+      <h2 id={'manual-title-' + e.id}><button className="manual-open" onClick={onOpen}>{e.title}</button></h2>
       <p className="summary">
         {strip(e.content) ||
           e.attrs.description ||
@@ -1723,10 +1719,10 @@ function ManualCard({
         ))}
       </div>
       <div className="card-footer">
-        <span>{count} 份原始资料</span>
+        <span className="source-count"><FileText size={13} />{count} 份资料</span>
         <span>
           {date(e.updated_at)} 更新{' '}
-          <ArrowUpRight size={12} style={{ display: 'inline' }} />
+          <ArrowUpRight className="manual-open-arrow" size={15} />
         </span>
       </div>
     </article>

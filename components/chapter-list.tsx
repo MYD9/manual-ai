@@ -32,7 +32,7 @@ import {
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverTrigger, PopoverContent, PopoverTitle, PopoverDescription } from '@/components/ui/popover';
 import type { Entry } from '@/lib/api';
-import { attract, resist, inertia, tokens, cssEase } from '@/lib/motion';
+import { attract, resist, tokens, cssEase } from '@/lib/motion';
 import { ErrorFeedback, useHaptic } from '@/components/tactile';
 
 type Props = {
@@ -56,8 +56,7 @@ export default function ChapterList(props: Props) {
   const [helpOpen, setHelpOpen] = useState(false), [moveId, setMoveId] = useState(''), [movePosition, setMovePosition] = useState('1');
   const list = useRef<HTMLDivElement>(null),
     busy = useRef(false),
-    validDrop = useRef(false),
-    lastMove = useRef({ y: 0, time: 0, velocity: 0 });
+    validDrop = useRef(false);
   const latest = useRef(chapters);
   latest.current = chapters;
   const retry = useRef<string[]>([]);
@@ -218,24 +217,12 @@ export default function ChapterList(props: Props) {
         }}
         onDragStart={(event) => {
           setActiveId(String(event.active.id));
-          lastMove.current = { y: 0, time: performance.now(), velocity: 0 };
           pulse('hold');
         }}
         onDragOver={(event) => {
           const next = event.over ? String(event.over.id) : null;
           if (next && next !== overId) pulse('snap');
           setOverId(next);
-        }}
-        onDragMove={(event) => {
-          const now = performance.now();
-          lastMove.current = {
-            y: event.delta.y,
-            time: now,
-            velocity:
-              ((event.delta.y - lastMove.current.y) /
-                Math.max(1, now - lastMove.current.time)) *
-              tokens.duration.fast,
-          };
         }}
         onDragCancel={() => {
           validDrop.current = false;
@@ -277,21 +264,8 @@ export default function ChapterList(props: Props) {
                     styles: { active: { opacity: '0' } },
                   }),
                   keyframes: ({ transform: { initial, final } }) => {
-                    const tail =
-                      validDrop.current &&
-                      performance.now() - lastMove.current.time <
-                        tokens.duration.fast
-                        ? inertia(lastMove.current.velocity)
-                        : 0;
                     return [
                       { transform: CSS.Transform.toString(initial) },
-                      {
-                        transform: CSS.Transform.toString({
-                          ...final,
-                          y: final.y + tail,
-                        }),
-                        offset: 0.85,
-                      },
                       { transform: CSS.Transform.toString(final) },
                     ];
                   },

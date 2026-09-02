@@ -6,5 +6,6 @@
 @import './tactile.css';
 @import './reader-ai.css';
 @import './navigation-polish.css';
+@import './workspace-refresh.css';
 @source './';
 @source '../components';

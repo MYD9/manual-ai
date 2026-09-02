@@ -1,7 +1,7 @@
 /* Generated from lib/motion-tokens.json. Run npm run tokens after editing. */
 :root {
-  --scale-hover: 1.002;
-  --scale-press: 0.98;
+  --scale-hover: 1;
+  --scale-press: 0.97;
   --scale-cardPress: 0.996;
   --scale-pickup: 1.012;
   --scale-dialog: 0.995;
@@ -15,8 +15,8 @@
   --duration-normal: 180ms;
   --duration-slow: 280ms;
   --ease-standard: cubic-bezier(0.2, 0, 0, 1);
-  --ease-enter: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --ease-enter: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-exit: cubic-bezier(0.23, 1, 0.32, 1);
   --spring-snappy: linear(0, 0.165, 0.4203, 0.6346, 0.7836, 0.8776, 0.9334, 0.9649, 0.9821, 0.9912, 0.9958, 0.9981, 0.9992, 0.9997, 0.9999, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1);
   --spring-snappy-mass: 0.6;
   --spring-snappy-stiffness: 680;
@@ -38,8 +38,8 @@
   --elevation-2: 0 4px 12px #26341f10;
   --elevation-3: 0 12px 28px #26341f24;
   --elevation-4: 0 20px 50px #26341f2b;
-  --hover-scale: 1.002;
-  --press-scale: 0.98;
+  --hover-scale: 1;
+  --press-scale: 0.97;
   --drag-friction: 0.82;
   --snap-strength: 0.35;
   --spin-duration: 900ms;

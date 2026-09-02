@@ -2,8 +2,8 @@
   "duration": { "fast": 100, "normal": 180, "slow": 280 },
   "ease": {
     "standard": [0.2, 0, 0, 1],
-    "enter": [0.16, 1, 0.3, 1],
-    "exit": [0.4, 0, 1, 1]
+    "enter": [0.23, 1, 0.32, 1],
+    "exit": [0.23, 1, 0.32, 1]
   },
   "spring": {
     "snappy": { "mass": 0.6, "stiffness": 680, "damping": 38 },
@@ -20,8 +20,8 @@
     "elasticity": 0.12
   },
   "scale": {
-    "hover": 1.002,
-    "press": 0.98,
+    "hover": 1,
+    "press": 0.97,
     "cardPress": 0.996,
     "pickup": 1.012,
     "dialog": 0.995,
