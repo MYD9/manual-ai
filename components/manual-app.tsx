@@ -976,6 +976,7 @@ function Workspace() {
             <>
               <PageHeading
                 title={category || '我的说明书'}
+                help="一本说明书可以装下原件、章节、知识卡片和使用经验。点击“新建说明书”导入第一份资料。"
                 subtitle={
                   tag
                     ? '标签：#' + tag
@@ -1111,9 +1112,6 @@ function Workspace() {
                   </button>
                 </ReflowList>
               )}
-              <div className="bottom-note">
-                <HelpHint label="资料库使用说明">一本说明书可以装下原件、章节、知识卡片和使用经验。点击“新建说明书”导入第一份资料。</HelpHint>
-              </div>
             </>
           ) : view === 'imports' ? null : view === 'favorites' ? (
             <>
@@ -1566,10 +1564,12 @@ function Workspace() {
 function PageHeading({
   title,
   subtitle,
+  help,
   action,
 }: {
   title: string;
   subtitle: string;
+  help?: string;
   action?: React.ReactNode;
 }) {
   return (
@@ -1578,10 +1578,12 @@ function PageHeading({
         <div className="eyebrow">
           MANUAL AI / 工作空间
         </div>
-        <h1>
-          {title}
-        </h1>
-<HelpHint label={title + ' · 使用说明'}>{subtitle}</HelpHint>
+        <div className="heading-title">
+          <h1>{title}</h1>
+          <HelpHint label={title + ' · 使用说明'}>
+            {subtitle}{help && <><br />{help}</>}
+          </HelpHint>
+        </div>
       </div>
       {action}
     </div>
