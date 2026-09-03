@@ -46,6 +46,7 @@ import {
   useHaptic,
 } from '@/components/tactile';
 import ChapterList from '@/components/chapter-list';
+import { HelpHint } from '@/components/help-hint';
 import MetadataAssistant from '@/components/metadata-assistant';
 import { WorkspaceNavigation } from '@/components/workspace-navigation';
 import { Button } from '@/components/ui/button';
@@ -535,7 +536,7 @@ function Workspace() {
             );
           })
         ) : (
-          <p className="side-hint">从第一份资料开始，慢慢建立你的分类。</p>
+          <HelpHint label="分类使用说明">从第一份资料开始建立分类，也可以使用右侧加号手动新增分类。</HelpHint>
         )}
         {tags.length > 0 && (
           <>
@@ -780,6 +781,7 @@ function Workspace() {
               </div>
               <div className="toolbar manual-tools">
                 <Button variant="secondary" onClick={() => setAi({ manualId: manual.id })}><Sparkles />问问这本说明书</Button>
+                <HelpHint label="AI 使用说明">{manual.attrs.ai_enabled ? '提问时会将相关资料正文发送至设置中的 AI 服务。回答可通过引用核对原文。' : '这本说明书尚未开启云端 AI。可在“编辑”中开启；正文会用于所配置服务的信息识别、分类与问答。'}</HelpHint>
                 <Button variant="outline" onClick={() => setOrganize(manual)}><Sparkles />AI 生成章节与卡片</Button>
                 <span className="manual-meta">{chapters.length} 个章节 · {date(manual.updated_at)} 更新</span>
                 <DropdownMenu>
@@ -792,12 +794,6 @@ function Workspace() {
                 <Button variant="ghost" className="manual-delete" aria-label="删除说明书" onClick={() => remove(manual)}><Trash2 />删除</Button>
               </div>
               <MetadataAssistant key={manual.id} manual={manual} jobs={jobs} refresh={refresh} onEdit={() => setEdit({kind:'manual', entry:manual})}/>
-              {!manual.attrs.ai_enabled && (
-                <p className="notice ai-scope-notice" style={{ marginTop: 15 }}>
-                  这本说明书尚未开启云端
-                  AI。可在“编辑”中开启；正文会用于所配置服务的信息识别、分类与问答。
-                </p>
-              )}
               <div className="section-tabs">
                 {[
                   ['content', '章节与卡片'],
@@ -879,7 +875,7 @@ function Workspace() {
                     <details open>
                     <summary>章节目录 <span>{chapters.length}</span><ChevronDown size={15} /></summary>
                     <div className="card-top">
-                      <span className="muted">选择章节，专注阅读</span>
+                      <HelpHint label="章节阅读说明">选择章节可只查看该章的卡片；点击“全部内容”返回完整内容。右侧加号用于新增章节。</HelpHint>
                       <button
                         aria-label="新增章节"
                         className="icon-btn"
@@ -1116,12 +1112,7 @@ function Workspace() {
                 </ReflowList>
               )}
               <div className="bottom-note">
-                <span className="brand-icon small">
-                  <BookOpen size={17} />
-                </span>
-                <p>
-                  一本说明书，可以装下原件、章节、知识卡片，以及你的使用经验。
-                </p>
+                <HelpHint label="资料库使用说明">一本说明书可以装下原件、章节、知识卡片和使用经验。点击“新建说明书”导入第一份资料。</HelpHint>
               </div>
             </>
           ) : view === 'imports' ? null : view === 'favorites' ? (
@@ -1590,7 +1581,7 @@ function PageHeading({
         <h1>
           {title}
         </h1>
-        <p>{subtitle}</p>
+<HelpHint label={title + ' · 使用说明'}>{subtitle}</HelpHint>
       </div>
       {action}
     </div>

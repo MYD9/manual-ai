@@ -30,6 +30,7 @@ import {
   Trash2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useHintHover } from '@/components/help-hint';
 import { Popover, PopoverTrigger, PopoverContent, PopoverTitle, PopoverDescription } from '@/components/ui/popover';
 import type { Entry } from '@/lib/api';
 import { attract, resist, tokens, cssEase } from '@/lib/motion';
@@ -54,6 +55,15 @@ export default function ChapterList(props: Props) {
     '',
   );
   const [helpOpen, setHelpOpen] = useState(false), [moveId, setMoveId] = useState(''), [movePosition, setMovePosition] = useState('1');
+  const hoverHelp = useHintHover();
+  function changeHelp(open: boolean) {
+    setHelpOpen(open);
+    if (open) {
+      const id = items.some(e => e.id === selected) ? selected : items[0]?.id || '';
+      setMoveId(id);
+      setMovePosition(String(Math.max(0, items.findIndex(e => e.id === id)) + 1));
+    }
+  }
   const list = useRef<HTMLDivElement>(null),
     busy = useRef(false),
     validDrop = useRef(false);
@@ -143,27 +153,23 @@ export default function ChapterList(props: Props) {
   return (
     <div className="chapter-sorter" aria-busy={saving}>
       <div className="chapter-sort-toolbar">
-        <span><GripVertical size={14} aria-hidden="true" />拖动调整顺序</span>
-        <Popover open={helpOpen} onOpenChange={open => {
-          setHelpOpen(open);
-          if (open) {
-            const id = items.some(e => e.id === selected) ? selected : items[0]?.id || '';
-            setMoveId(id); setMovePosition(String(Math.max(0, items.findIndex(e => e.id === id)) + 1));
-          }
-        }}>
-          <PopoverTrigger render={<Button variant="ghost" size="sm" />} aria-label="查看章节排序示意" disabled={!items.length}><CircleHelp size={14} />示意</PopoverTrigger>
-          <PopoverContent align="start" side="right" className="chapter-sort-help">
+        <Popover open={helpOpen} onOpenChange={changeHelp}>
+          <PopoverTrigger className="icon-btn help-hint" aria-label="章节排序帮助与位置选择"
+            openOnHover={hoverHelp} delay={tokens.duration.normal} closeDelay={tokens.duration.fast}
+            onFocus={event => { if (event.currentTarget.matches(':focus-visible')) changeHelp(true); }}
+          ><CircleHelp size={15} aria-hidden="true" /></PopoverTrigger>
+          <PopoverContent align="start" side="right" className="chapter-sort-help" initialFocus={false}>
             <PopoverTitle>怎样调整章节顺序</PopoverTitle>
-            <PopoverDescription>按住章节上的“拖动”，移到目标位置后松开。</PopoverDescription>
+            <PopoverDescription>按住章节右侧的六点图标，移到目标位置后松开。</PopoverDescription>
             <div className="sort-example" role="img" aria-label="拖动章节 B，将它放到章节 A 前面">
               <div className="sort-example-target">放到这里</div>
               <div className="sort-example-row"><GripVertical size={14} />章节 A</div>
               <div className="sort-example-row sort-example-picked"><GripVertical size={14} />章节 B<MoveVertical size={15} /></div>
             </div>
             <ul className="sort-instructions">
-              <li>鼠标：按住“拖动”，上下移动。</li>
-              <li>触屏：长按“拖动”后移动。</li>
-              <li>键盘：聚焦“拖动”，空格拿起，上下键移动，空格放下，Esc 取消。</li>
+              <li>鼠标：按住右侧六点图标，上下移动。</li>
+              <li>触屏：长按右侧六点图标后移动。</li>
+              <li>键盘：聚焦右侧六点图标，空格拿起，上下键移动，空格放下，Esc 取消。</li>
             </ul>
             <form className="sort-position-form" onSubmit={event => {
               event.preventDefault();
@@ -279,7 +285,7 @@ export default function ChapterList(props: Props) {
               style={{ scale: reduced ? 1 : tokens.scale.pickup }}
             >
               <span className="chapter-title">{picked.title}</span>
-              <span className="drag-handle"><GripVertical size={14} />拖动</span>
+              <span className="drag-handle"><GripVertical size={16} /></span>
               <span className="icon-btn"><Edit3 /></span>
               <span className="icon-btn"><Trash2 /></span>
             </div>
@@ -371,11 +377,12 @@ function SortableChapter({
         title="按住拖动排序；触屏长按，键盘按空格开始"
         disabled={disabled}
       >
-        <GripVertical size={14} aria-hidden="true" />拖动
+        <GripVertical size={16} aria-hidden="true" />
       </button>
       <button
         className="icon-btn"
         aria-label="编辑章节"
+        title="编辑章节"
         onClick={onEdit}
         disabled={disabled}
       >
@@ -384,6 +391,7 @@ function SortableChapter({
       <button
         className="icon-btn"
         aria-label="删除章节"
+        title="删除章节"
         onClick={onRemove}
         disabled={disabled}
       >

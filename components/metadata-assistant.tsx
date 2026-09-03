@@ -5,6 +5,7 @@ import { post, type Entry, type Job } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { ErrorFeedback } from '@/components/tactile';
+import { HelpHint } from '@/components/help-hint';
 
 export default function MetadataAssistant({manual,jobs,refresh,onEdit}: {manual:Entry; jobs:Job[]; refresh:()=>Promise<void>; onEdit:()=>void}) {
   const [open,setOpen] = useState(false), [instruction,setInstruction] = useState(''), [scope,setScope] = useState<'category'|'all'>('category');
@@ -22,7 +23,8 @@ export default function MetadataAssistant({manual,jobs,refresh,onEdit}: {manual:
     <div className="card-top">
       <div>
         <strong>{pending ? 'AI 正在整理这本说明书' : manual.attrs.identification ? 'AI 已识别信息与分类' : 'AI 信息识别与分类'}</strong>
-        <p className="muted" role="status">{pending ? job.stage : manual.attrs.identification?.reason || '自动识别品牌、型号、标签与分类，之后仍可手动编辑。'}</p>
+        <HelpHint label="自动识别使用说明">自动识别品牌、型号、标签与分类，之后仍可手动编辑。点击“调整分类与信息”可提出单独的调整要求。</HelpHint>
+        {(pending || manual.attrs.identification?.reason) && <p className="muted" role="status">{pending ? job.stage : manual.attrs.identification?.reason}</p>}
       </div>
       <Button variant="outline" disabled={pending} onClick={() => {setOpen(true);setError('');}}><Sparkles/>调整分类与信息</Button>
     </div>
